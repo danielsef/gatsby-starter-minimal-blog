@@ -51,8 +51,8 @@ const IndexPage = ({
       <Hero>
         <h1>Hi.</h1>
         <p>
-          I&apos;m John Doe, a Senior UX Developer with five years of industry experience, specializing in developing
-          React apps with the best UX users can get.
+          I&apos;m Daniel Sef, a Senior Data Engineer and AI Expert with nine years of industry experience, specializing in developing
+          data-driven and streaming apps with the best performance users can get.
         </p>
         <Link to="/contact">
           <Button big>
