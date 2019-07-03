@@ -1,4 +1,4 @@
-tmodule.exports = {
+module.exports = {
   pathPrefix: '/', // Prefix for all links. If you deploy your site to example.com/portfolio your pathPrefix should be "portfolio"
 
   siteTitle: '87 Percent Tech Blog', // Navigation and Site Title
