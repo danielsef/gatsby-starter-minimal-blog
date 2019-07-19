@@ -1,43 +1,55 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { darken, lighten } from 'polished'
+import React from 'react';
+import _ from 'lodash';
 
-const Wrapper = styled.header`
-  background: linear-gradient(
-    45deg,
-    ${props => darken(0.1, props.theme.colors.primary)},
-    ${props => lighten(0.1, props.theme.colors.primary)}
-  );
-  grid-column: 1 / -1;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding: 2rem 2rem 5rem 2rem;
-  box-shadow: inset 0px -10px 30px 0px rgba(0, 0, 0, 0.1);
-`
+import {Link, safePrefix} from '../utils';
 
-const Content = styled.div`
-  max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
-
-  a {
-    color: ${props => props.theme.colors.white};
-    font-size: 1.2rem;
-    &:hover {
-      opacity: 0.85;
-      color: ${props => props.theme.colors.white};
+export default class Header extends React.Component {
+    render() {
+        return (
+            <header id="masthead" className="site-header outer">
+              <div className="inner">
+                <div className="site-header-inside">
+                  <div className="site-branding">
+                    {_.get(this.props, 'pageContext.site.siteMetadata.header.logo_img') && 
+                    <p className="site-logo">
+                      <Link to={safePrefix('/')}>
+                        <img src={safePrefix(_.get(this.props, 'pageContext.site.siteMetadata.header.logo_img'))} alt="Logo" />
+                      </Link>
+                    </p>
+                    }
+                    {((_.get(this.props, 'pageContext.frontmatter.template') === 'home') || (_.get(this.props, 'pageContext.frontmatter.template') === 'blog')) ? 
+                    <h1 className="site-title"><Link to={safePrefix('/')}>{_.get(this.props, 'pageContext.site.siteMetadata.header.title')}</Link></h1>
+                     : 
+                    <p className="site-title"><Link to={safePrefix('/')}>{_.get(this.props, 'pageContext.site.siteMetadata.header.title')}</Link></p>
+                    }
+                  </div>
+                  {(_.get(this.props, 'pageContext.menus.main') && _.get(this.props, 'pageContext.site.siteMetadata.header.has_nav')) && <React.Fragment>
+                  <nav id="main-navigation" className="site-navigation" aria-label="Main Navigation">
+                    <div className="site-nav-inside">
+                      <button id="menu-close" className="menu-toggle"><span className="screen-reader-text">Open Menu</span><span
+                          className="icon-close" aria-hidden="true" /></button>
+                      <ul className="menu">
+                        {_.map(_.get(this.props, 'pageContext.menus.main'), (item, item_idx) => (
+                        <li key={item_idx} className={'menu-item ' + ((_.get(this.props, 'pageContext.url') === _.get(item, 'url')) ? ' current-menu-item' : '')}>
+                          <Link to={safePrefix(_.get(item, 'url'))}>{_.get(item, 'title')}</Link>
+                        </li>
+                        ))}
+                        {_.get(this.props, 'pageContext.site.siteMetadata.header.menu.actions') && 
+                          _.map(_.get(this.props, 'pageContext.site.siteMetadata.header.menu.actions'), (action, action_idx) => (
+                          <li key={action_idx} className="menu-item menu-button">
+                            <Link to={safePrefix(_.get(action, 'url'))} className="button">{_.get(action, 'label')}</Link>
+                          </li>
+                          ))
+                        }
+                      </ul>
+                    </div>
+                  </nav>
+                  <button id="menu-open" className="menu-toggle"><span className="screen-reader-text">Close Menu</span><span className="icon-menu"
+                      aria-hidden="true" /></button>
+                  </React.Fragment>}
+                </div>
+              </div>
+            </header>
+        );
     }
-  }
-`
-
-const Header = ({ children }) => (
-  <Wrapper>
-    <Content>{children}</Content>
-  </Wrapper>
-)
-
-export default Header
-
-Header.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.node]).isRequired,
 }
